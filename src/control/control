@@ -1,0 +1,9 @@
+Package: port-config
+Version: 0.1
+Provides:
+Source: package/port-config
+Section: net
+Priority: optional
+Maintainer: Tim Wilkinson (KN6PLV)
+Architecture: all
+Description: Node port configurator
