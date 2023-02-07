@@ -15,3 +15,7 @@ Configure the ports by navigating to the following URL:
 Compatible with
 * Mikrotik hAP AC2
 * Mikrotik hAP AC3
+
+## Notes
+
+Custom port configurations will survive across reboots and upgrades.
