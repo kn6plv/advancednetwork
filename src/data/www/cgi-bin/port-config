@@ -281,7 +281,13 @@ html.print([[
             padding-bottom: 10px;
         }
         .ports {
-            padding-bottom: 20px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #e0e0e0;
+            border: 1px solid #c0c0c0;
+        }
+        .ports tr:first-child {
+            font-variant: all-small-caps;
         }
         .ports td {
             text-align: center;
@@ -296,6 +302,7 @@ html.print([[
         }
         .l {
             font-size: 16px;
+            font-variant: all-small-caps;
             width: 120px;
             padding: 6px 0 2px 0;
         }
@@ -304,8 +311,12 @@ html.print([[
             color: grey;
         }
         .v input {
+            padding-left: 2px;
             font-size: 12px;
             width: 65px;
+            border: 0;
+            background-color: #f0f0f0;
+            outline: none;
         }
     </style>
 ]])
@@ -394,11 +405,11 @@ do
     html.print("<div class='l'>" .. config.name .. "</div>")
     if config.name == "wan" then
         local value = not config.vlan or config.vlan < 4 and "" or config.vlan
-        html.print("<div class='v'>vlan <input type='text' placeholder='Untagged' onchange='wan_vlan_change(this, parseInt(this.value))' value='" .. value .. "'></div>")
+        html.print("<div class='v'>vlan: <input type='text' placeholder='Untagged' onchange='wan_vlan_change(this, parseInt(this.value))' value='" .. value .. "'></div>")
     elseif config.name == "dtdlink" then
-        html.print("<div class='v'>vlan <span>2</span></div>")
+        html.print("<div class='v'>vlan: <span>2</span></div>")
     else
-        html.print("<div class='v'>vlan <span>Untagged</span></div>")
+        html.print("<div class='v'>vlan: <span>Untagged</span></div>")
     end
     html.print("</td>")
     for _, port in ipairs(layout.ports)
