@@ -263,7 +263,7 @@ html.print([[
         }
         .title {
             font-size: 24px;
-            padding-bottom: 14px;
+            padding: 5px 0;
             text-align: center;
         }
         .control {
@@ -372,6 +372,7 @@ html.print([[
 ]])
 html.print([[
 <div class="app">
+    <hr>
     <div class="title">Port Configuration</div>
     <hr>
 ]])
