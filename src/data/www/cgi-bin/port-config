@@ -129,8 +129,7 @@ function write_user_config(config, variables)
     f:write("\nconfig device\n")
     f:write("\toption name 'br-" .. network .. "'\n")
     f:write("\toption type 'bridge'\n")
-    f:write("include /etc/aredn_include/fixedmac." .. network .. "\n")
-    --f:write("\toption macaddr '<" .. network .. "_mac>'\n")
+    f:write("\toption macaddr '<" .. network .. "_mac>'\n")
     f:write("\tlist ports 'br0." .. config.vlan .. "'\n")
     f:write("\nconfig interface " .. network .. "\n")
     f:write("\toption device 'br-" .. network .. "'\n")
@@ -269,7 +268,7 @@ html.print([[
         }
         .control {
             text-align: center;
-            padding-bottom: 10px;
+            padding: 5px 0;
         }
         .control input {
             margin: 0 4px;
