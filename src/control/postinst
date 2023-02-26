@@ -1,12 +1,12 @@
 #!/bin/sh
 
-sed -i -e '/\/cgi-bin\/port-config:root:\$p\$root/d' /etc/httpd.conf
-echo "/cgi-bin/port-config:root:\$p\$root" >> /etc/httpd.conf
+sed -i -e '/\/cgi-bin\/advancednetwork:root:\$p\$root/d' /etc/httpd.conf
+echo "/cgi-bin/advancednetwork:root:\$p\$root" >> /etc/httpd.conf
 
 echo ""
-echo "Reconfigure device ports at:"
+echo "Configure advanced network optiions here:"
 echo ""
-echo "http:[NODENAME]/cgi-bin/port-config"
+echo "http:[NODENAME]/cgi-bin/advancednetwork"
 echo ""
 echo "Please reboot node to update page permissions!!"
 

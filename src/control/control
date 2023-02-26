@@ -1,9 +1,9 @@
-Package: port-config
+Package: advancednetwork
 Version: 0.4
 Provides:
-Source: package/port-config
+Source: package/advancednetwork
 Section: net
 Priority: optional
 Maintainer: Tim Wilkinson (KN6PLV)
 Architecture: all
-Description: Node port configurator
+Description: Advanced network configuration

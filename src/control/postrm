@@ -1,5 +1,5 @@
 #!/bin/sh
 
-sed -i -e '/\/cgi-bin\/port-config:root:\$p\$root/d' /etc/httpd.conf
+sed -i -e '/\/cgi-bin\/advancednetwork:root:\$p\$root/d' /etc/httpd.conf
 
 exit 0
