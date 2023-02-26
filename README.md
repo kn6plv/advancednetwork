@@ -1,6 +1,6 @@
 # advancednetwork
 
-A simple to use utility to configure multi-port AREDN devices when you need a configuration other than the default.
+Provides a simple UI for advanced network configuration on AREDN devices.
 
 ## How To
 
