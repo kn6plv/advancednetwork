@@ -397,8 +397,6 @@ html.print([[
             font-size: 12px;
             width: 65px;
             border: 0;
-            background-color: #f0f0f0;
-            outline: none;
         }
         .xlinks {
             margin: 30px auto;
@@ -426,12 +424,13 @@ html.print([[
         }
         .xlinks td input {
             width: 100%;
+            border: 1px solid transparent;
+        }
+        .xlinks td input.i {
+            border-color: red;
         }
         .xlinks td:nth-child(1) input, .xlinks td:nth-child(5) input {
             text-align: right;
-        }
-        .xlinks td:nth-child(6) select {
-            outline: none;
         }
         .xlinks td:nth-child(7) button {
             width: 24px;
@@ -516,6 +515,46 @@ html.print([[
             }
             return xlinks;
         }
+        function validate_xlinks() {
+            const rows = document.querySelectorAll("table.xlinks tr");
+            for (let i = 1; i < rows.length; i++) {
+                const cells = rows[i].querySelectorAll("td input");
+                if (/^\d+$/.test(cells[0].value) && parseInt(cells[0].value) > 3) {
+                    cells[0].classList.remove("i");
+                }
+                else {
+                    cells[0].classList.add("i");
+                }
+                if (/^\d+\.\d+\.\d+\.\d+$/.test(cells[1].value)) {
+                    cells[1].classList.remove("i");
+                }
+                else {
+                    cells[1].classList.add("i");
+                }
+                if (/^\d+\.\d+\.\d+\.\d+$/.test(cells[2].value)) {
+                    cells[2].classList.remove("i");
+                }
+                else {
+                    cells[2].classList.add("i");
+                }
+                if (/^\d+$/.test(cells[3].value)) {
+                    cells[3].classList.remove("i");
+                }
+                else {
+                    cells[3].classList.add("i");
+                }
+                if (!cells[1].classList.contains("i") && !cells[1].classList.contains("i")) {
+                    const ip = cells[1].value.split(".");
+                    const peer = cells[2].value.split(".");
+                    const i3 = parseInt(ip[3]);
+                    const p3 = parseInt(peer[3]);
+                    if (ip[0] != peer[0] || ip[1] != peer[1] || ip[2] != peer[2] || (i3 & 252) != (p3 & 252) || i3 == p3 || (i3 & 3) == 0 || (p3 & 3) == 0 || (i3 & 3) == 3 || (p3 & 3) == 3) {
+                        cells[1].classList.add("i");
+                        cells[2].classList.add("i");
+                    }
+                }
+            }
+        }
         function save_config() {
             document.getElementById('configs').value = JSON.stringify(configs);
             document.getElementById('xlinks').value = JSON.stringify(generate_xlinks());
@@ -591,6 +630,7 @@ do
     html.print("</tr>")
 end
 html.print([[</table>]])
+html.print([[<script>document.querySelector(".xlinks").addEventListener("keyup", validate_xlinks);</script>]])
 
 print([[</div>]])
 html.footer()
