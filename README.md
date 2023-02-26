@@ -6,7 +6,7 @@ Provides a simple UI for advanced network configuration on AREDN devices.
 
 Install the ipk in the usual AREDN way, then reboot the node.
 
-Configure the ports by navigating to the following URL:
+Configure by navigating to the URL:
 
 ```http://[NODENAME]/cgi-bin/advancednetwork```
 
