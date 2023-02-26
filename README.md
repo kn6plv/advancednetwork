@@ -18,4 +18,4 @@ Compatible with
 
 ## Notes
 
-Custom port configurations will survive across reboots and upgrades.
+Custom configurations will survive across reboots and upgrades.
