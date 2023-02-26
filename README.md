@@ -18,4 +18,4 @@ Compatible with
 
 ## Notes
 
-Custom configurations will survive across reboots and upgrades.
+Custom configurations will survive across reboots and upgrades but this utility will need to be reinstalled to make further changes.
