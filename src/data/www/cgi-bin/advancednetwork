@@ -399,6 +399,7 @@ html.print([[
             border: 0;
         }
         .xlinks {
+            min-width: 610px;
             margin: 30px auto;
             padding: 20px;
             background-color: #e0e0e0;
@@ -495,10 +496,12 @@ html.print([[
                 .. (function() local s = "" for _, port in ipairs(layout.ports) do s = s .. "<option>" .. port .. "</option>" end return s end)()
                 .. [[</select></td><td><button onclick='xlink_remove(this)'>-</button></td>"
             tbody.appendChild(row)
+            validate();
         }
         function xlink_remove(button) {
             const row = button.parentNode.parentNode;
             row.parentNode.removeChild(row)
+            validate();
         }
         function generate_xlinks() {
             const xlinks = [];
@@ -565,13 +568,13 @@ html.print([[
                         cansave = false;
                     }
                 }
+            }
 
-                if (cansave) {
-                    document.getElementById("save").disabled = null;
-                }
-                else {
-                    document.getElementById("save").disabled = "disabled"
-                }
+            if (cansave) {
+                document.getElementById("save").disabled = null;
+            }
+            else {
+                document.getElementById("save").disabled = "disabled"
             }
         }
         function save_config() {
@@ -649,7 +652,7 @@ do
     html.print("</tr>")
 end
 html.print([[</table>]])
-html.print([[<script>document.querySelector(".xlinks").addEventListener("keyup", validate);</script>]])
+html.print([[<script>document.querySelector(".xlinks").addEventListener("change", validate);</script>]])
 
 print([[</div>]])
 html.footer()
