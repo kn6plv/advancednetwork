@@ -426,7 +426,7 @@ html.print([[
             width: 100%;
             border: 1px solid transparent;
         }
-        .xlinks td input.i {
+        .xlinks td input.error {
             border-color: red;
         }
         .xlinks td:nth-child(1) input, .xlinks td:nth-child(5) input {
@@ -485,7 +485,8 @@ html.print([[
                     config.ports[port].tagged = true;
                 }
                 input.value = value;
-            } 
+            }
+            validate();
         }
         function xlink_add() {
             const tbody = document.querySelector("table.xlinks tbody");
@@ -515,43 +516,61 @@ html.print([[
             }
             return xlinks;
         }
-        function validate_xlinks() {
+        function validate() {
+            let cansave = true;
+            const wan_config = configs.find(c => c.name == "wan");
+            let wan_vlan = "__untagged__";
+            if (wan_config.tagged) {
+                wan_vlan = wan_config.vlan;
+            }
             const rows = document.querySelectorAll("table.xlinks tr");
             for (let i = 1; i < rows.length; i++) {
                 const cells = rows[i].querySelectorAll("td input");
-                if (/^\d+$/.test(cells[0].value) && parseInt(cells[0].value) > 3) {
-                    cells[0].classList.remove("i");
+                if (/^\d+$/.test(cells[0].value) && parseInt(cells[0].value) > 3 && cells[0].value != wan_vlan) {
+                    cells[0].classList.remove("error");
                 }
                 else {
-                    cells[0].classList.add("i");
+                    cells[0].classList.add("error");
+                    cansave = false;
                 }
                 if (/^\d+\.\d+\.\d+\.\d+$/.test(cells[1].value)) {
-                    cells[1].classList.remove("i");
+                    cells[1].classList.remove("error");
                 }
                 else {
-                    cells[1].classList.add("i");
+                    cells[1].classList.add("error");
+                    cansave = false;
                 }
                 if (/^\d+\.\d+\.\d+\.\d+$/.test(cells[2].value)) {
-                    cells[2].classList.remove("i");
+                    cells[2].classList.remove("error");
                 }
                 else {
-                    cells[2].classList.add("i");
+                    cells[2].classList.add("error");
+                    cansave = false;
                 }
                 if (/^\d+$/.test(cells[3].value)) {
-                    cells[3].classList.remove("i");
+                    cells[3].classList.remove("error");
                 }
                 else {
-                    cells[3].classList.add("i");
+                    cells[3].classList.add("error");
+                    cansave = false;
                 }
-                if (!cells[1].classList.contains("i") && !cells[1].classList.contains("i")) {
+                if (!cells[1].classList.contains("error") && !cells[1].classList.contains("error")) {
                     const ip = cells[1].value.split(".");
                     const peer = cells[2].value.split(".");
                     const i3 = parseInt(ip[3]);
                     const p3 = parseInt(peer[3]);
                     if (ip[0] != peer[0] || ip[1] != peer[1] || ip[2] != peer[2] || (i3 & 252) != (p3 & 252) || i3 == p3 || (i3 & 3) == 0 || (p3 & 3) == 0 || (i3 & 3) == 3 || (p3 & 3) == 3) {
-                        cells[1].classList.add("i");
-                        cells[2].classList.add("i");
+                        cells[1].classList.add("error");
+                        cells[2].classList.add("error");
+                        cansave = false;
                     }
+                }
+
+                if (cansave) {
+                    document.getElementById("save").disabled = null;
+                }
+                else {
+                    document.getElementById("save").disabled = "disabled"
                 }
             }
         }
@@ -573,7 +592,7 @@ end
 html.print([[
     <div class="control">
         <form method="post" action="advancednetwork" enctype="multipart/form-data">
-            <input type="button" value="Save Changes" onclick="save_config(); document.getElementById('op').value = 'save'; form.submit()">
+            <input type="button" id="save" value="Save Changes" onclick="save_config(); document.getElementById('op').value = 'save'; form.submit()">
             <input type="button" value="Default Values" onclick="document.getElementById('op').value = 'defaults'; form.submit()">
             <input type="button" value="Reboot" onclick="document.getElementById('op').value = 'reboot'; form.submit()">
             <input type="hidden" name="configs" id="configs" value="">
@@ -630,7 +649,7 @@ do
     html.print("</tr>")
 end
 html.print([[</table>]])
-html.print([[<script>document.querySelector(".xlinks").addEventListener("keyup", validate_xlinks);</script>]])
+html.print([[<script>document.querySelector(".xlinks").addEventListener("keyup", validate);</script>]])
 
 print([[</div>]])
 html.footer()
