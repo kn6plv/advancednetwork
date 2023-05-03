@@ -133,7 +133,8 @@ function read_xlink_config()
                 ipaddr = nil,
                 peer = nil,
                 weight = 0,
-                port = nil
+                port = nil,
+                bandwidth = 50
             }
             configs[#configs + 1] = config
         elseif line:match("^config%s+interface") then
@@ -162,6 +163,10 @@ function read_xlink_config()
             m = line:match("option%s+weight%s+'([%d]+)'")
             if m then
                 config.weight = tonumber(m)
+            end
+            m = line:match("option%s+bandwidth%s+'([%d]+)'")
+            if m then
+                config.bandwidth = tonumber(m)
             end
         end
     end
@@ -260,6 +265,7 @@ function write_xlink_config(configs)
         f:write("\toption netmask '255.255.255.252'\n")
         f:write("\toption peer '" .. config.peer .. "'\n")
         f:write("\toption weight '" .. config.weight .. "'\n")
+        f:write("\toption bandwidth '" .. config.bandwidth .. "'\n")
     end
     f:close()
 end
@@ -434,13 +440,13 @@ html.print([[
             width: 100px;
             padding-left: 10px;
         }
-        .xlinks td:nth-child(1), .xlinks td:nth-child(5) {
+        .xlinks td:nth-child(1), .xlinks td:nth-child(5), .xlinks td:nth-child(6) {
             width: 40px;
         }
-        .xlinks td:nth-child(6) {
+        .xlinks td:nth-child(7) {
             width: 55px;
         }
-        .xlinks td:nth-child(7) {
+        .xlinks td:nth-child(8) {
             width: 20px;
         }
         .xlinks td input {
@@ -450,10 +456,10 @@ html.print([[
         .xlinks td input.error {
             border-color: red;
         }
-        .xlinks td:nth-child(1) input, .xlinks td:nth-child(5) input {
+        .xlinks td:nth-child(1) input, .xlinks td:nth-child(5) input, .xlinks td:nth-child(6) input {
             text-align: right;
         }
-        .xlinks td:nth-child(7) button {
+        .xlinks td:nth-child(8) button {
             width: 24px;
             line-height: 14px;
             background-color: #f0f0f0;
@@ -512,7 +518,7 @@ html.print([[
         function xlink_add() {
             const tbody = document.querySelector("table.xlinks tbody");
             const row = document.createElement("tr");
-            row.innerHTML = "<td><input type='text' value=''></td><td><input type='text' value=''></td><td><input type='text' value=''></td><td>255.255.255.252</td><td><input type='text' value='0'></td><td><select>]]
+            row.innerHTML = "<td><input type='text' value=''></td><td><input type='text' value=''></td><td><input type='text' value=''></td><td>255.255.255.252</td><td><input type='text' value='0'></td><td><input type='text' value='50'></td><td><select>]]
                 .. (function() local s = "" for _, port in ipairs(layout.ports) do s = s .. "<option>" .. port .. "</option>" end return s end)()
                 .. [[</select></td><td><button onclick='xlink_remove(this)'>-</button></td>"
             tbody.appendChild(row)
@@ -534,6 +540,7 @@ html.print([[
                     ipaddr: cells[1].value,
                     peer: cells[2].value,
                     weight: parseInt(cells[3].value),
+                    bandwidth: parseInt(cells[4].value),
                     port: rows[i].querySelector("select").value
                 });
             }
@@ -657,11 +664,11 @@ end
 html.print([[</table>]])
 
 html.print([[<table class="xlinks" align="center"><caption>Xlinks</caption>]])
-html.print([[<tr class="h"><td>vlan</td><td>ip address</td><td>peer address</td><td>netmask</td><td>weight</td><td>&nbsp;Port</td><td><button onclick="xlink_add()">+</button></td></tr>]])
+html.print([[<tr class="h"><td>vlan</td><td>ip address</td><td>peer address</td><td>netmask</td><td>weight</td><td>bandwidth</td><td>&nbsp;Port</td><td><button onclick="xlink_add()">+</button></td></tr>]])
 for _, xlink in ipairs(xlinks)
 do
     html.print("<tr id='" .. xlink.name .. "'>")
-    html.print("<td><input type='text' value='" .. xlink.vlan .. "'></td><td><input type='text' value='" .. xlink.ipaddr .. "'></td><td><input type='text' value='" .. xlink.peer .. "'></td><td>255.255.255.252</td><td><input type='text' value='" .. xlink.weight .. "'></td>")
+    html.print("<td><input type='text' value='" .. xlink.vlan .. "'></td><td><input type='text' value='" .. xlink.ipaddr .. "'></td><td><input type='text' value='" .. xlink.peer .. "'></td><td>255.255.255.252</td><td><input type='text' value='" .. xlink.weight .. "'></td><td><input type='text' value='" .. xlink.bandwidth .. "'></td>")
     html.print("<td><select>")
     for _, port in ipairs(layout.ports)
     do
